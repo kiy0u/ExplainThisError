@@ -4,6 +4,8 @@ An AI-powered web app that takes any error message — from your code or termina
 
 Built with Python, Flask, and the OpenAI API (GPT-4o mini).
 
+Live demo: https://explainthiserror.onrender.com
+
 ---
 
 ## Features
