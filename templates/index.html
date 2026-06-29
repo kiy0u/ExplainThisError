@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <title>ExplainThisError</title>
+</head>
+<body>
+    <main class="container">
+        <h1>ExplainThisError</h1>
+        <h4>An AI powered tool that helps explain errors given to you while coding, or errors given while working in the terminal. Because we've all been there before.</h4>
+        <h4>Disclaimer: This is meant to be used as a tool to help you understand the errors you might face. This tool utilizes AI, and can be inaccurate or incomplete. Always verify with official documentation and use best judgement and practice. </h4>
+        
+
+        <form id="error-form" action="/analyze" method="POST">
+            <textarea id="error_text" name="error_text" placeholder="Enter your error here!">{{ user_input }}</textarea><br>
+            <button id="analyze-btn" type="submit">Analyze</button>
+        </form>
+
+        <h3>Results:</h3>
+        
+        {% if error_message %}
+            <div class="error">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        {% if result %}
+            <div class="result-card severity-{{ result.severity|lower }}">
+                <h3>Source</h3>
+                <p>{{ result.source }}</p>
+
+                <h3>Error Type</h3>
+                <p>{{ result.error_type }}</p>
+
+                <h3>Category</h3>
+                <p>{{ result.category }}</p>
+
+                <h3>Severity</h3>
+                <p>{{ result.severity }}</p>
+
+                <h3>Explanation</h3>
+                <p>{{ result.explanation }}</p>
+
+                <h3>Likely Cause</h3>
+                <ul>
+                {% for item in result.likely_cause %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+                </ul>
+
+                <h3>Fix Steps</h3>
+                <ol>
+                    {% for step in result.fix_steps %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+
+                <h3>Example Commands</h3>
+                <pre>
+                    {% for cmd in result.example_commands %}
+                    {{ cmd }}
+                    {% endfor %}
+                </pre>
+
+                <p><strong>Confidence:</strong> {{ result.confidence }}</p>
+            </div>
+        {% else %}
+            <pre>No results yet!</pre>
+        {% endif %}
+    </main>
+    
+
+    <footer>
+        <p>Powered by OpenAI</p>
+        <p>Created by Rizzi</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById("error-form");
+        const button = document.getElementById("analyze-btn");
+
+        form.addEventListener("submit", () => {
+            button.textContent = "Analyzing...";
+            button.disabled = true;
+        });
+    </script>
+</body>
+</html>
